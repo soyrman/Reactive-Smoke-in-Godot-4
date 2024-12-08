@@ -1,10 +1,25 @@
-[gd_scene load_steps=9 format=3 uid="uid://cqs6ug15ui5e2"]
+[gd_scene load_steps=14 format=3 uid="uid://cqs6ug15ui5e2"]
 
 [ext_resource type="Material" uid="uid://dj8eh6ig43f10" path="res://materials/wall.tres" id="1_icly2"]
 [ext_resource type="PackedScene" uid="uid://dhykj53v8qfot" path="res://player/player.tscn" id="1_lvicc"]
 [ext_resource type="Script" path="res://VolumeFogGenerator.gd" id="3_205ur"]
 [ext_resource type="PackedScene" uid="uid://buffxca606k7c" path="res://square_smoke_volume.tscn" id="4_adcvx"]
 [ext_resource type="PackedScene" uid="uid://bnxjx2unpv42q" path="res://dummy/scene.gltf" id="5_luroh"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_oabnr"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_8rmp8"]
+sky_material = SubResource("ProceduralSkyMaterial_oabnr")
+
+[sub_resource type="Environment" id="Environment_uv8l1"]
+background_mode = 2
+sky = SubResource("Sky_8rmp8")
+tonemap_mode = 2
+glow_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ibpc3"]
 size = Vector3(14, 7, 10)
@@ -17,7 +32,16 @@ albedo_color = Color(0.823529, 1, 1, 0.321569)
 material = SubResource("StandardMaterial3D_00xw7")
 size = Vector3(14, 7, 10)
 
+[sub_resource type="BoxMesh" id="BoxMesh_xlvcu"]
+size = Vector3(10, 10, 1)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_2blak"]
+points = PackedVector3Array(5, 5, 0.5, 5, 5, -0.5, -5, 5, 0.5, 5, -5, 0.5, 5, -5, -0.5, -5, 5, -0.5, -5, -5, 0.5, -5, -5, -0.5)
+
 [node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_uv8l1")
 
 [node name="Block" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.7927, 0)
@@ -78,3 +102,24 @@ transform = Transform3D(-0.15, 0, 1.86265e-08, 0, 0.15, 0, -1.86265e-08, 0, -0.1
 
 [node name="Dummy5" parent="." instance=ExtResource("5_luroh")]
 transform = Transform3D(-0.15, 0, 1.86265e-08, 0, 0.15, 0, -1.86265e-08, 0, -0.15, 2.06044, 0, 18.4112)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.53531, 0)
+mesh = SubResource("BoxMesh_xlvcu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.53531, 0)
+shape = SubResource("ConvexPolygonShape3D_2blak")
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.54314)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.53531, 0)
+mesh = SubResource("BoxMesh_xlvcu")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.53531, 0)
+shape = SubResource("ConvexPolygonShape3D_2blak")
